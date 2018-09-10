@@ -2,11 +2,23 @@ require "../styles/index"
 
 _ = require "underscore"
 $ = require "jquery"
+io = require "socket.io-client"
+
+HOST = "localhost"
+#HOST = "admin.codeinthedark.interlogica.it"
 
 ace = require "brace"
 require "brace/mode/html"
 require "brace/theme/vibrant_ink"
 require "brace/ext/searchbox"
+
+console.log(ace)
+
+class WSConnector          
+  constructor: (host, onSocketMessage)->   
+    socket = io "#{host}:3000"
+    socket.on 'message', onSocketMessage
+    
 
 class App
   POWER_MODE_ACTIVATION_THRESHOLD: 200
@@ -62,6 +74,10 @@ class App
 
     @$body = $ "body"
 
+    @client = new WSConnector(HOST, @onSocketMessage)
+    @gotRound = false
+    @gettingRound = false
+
     @debouncedSaveContent = _.debounce @saveContent, 300
     @debouncedEndStreak = _.debounce @endStreak, @STREAK_TIMEOUT
     @throttledShake = _.throttle @shake, 100, trailing: false
@@ -96,6 +112,25 @@ class App
     editor.$blockScrolling = Infinity
 
     editor
+
+  onSocketMessage: (message) -> 
+    if message.type is 'ROUND_END_COUNTDOWN'
+      if not @gotRound and not @gettingRound
+        @gettingRound = true;
+        console.log('call get round')
+        url = "http://#{HOST}:3000/round/#{message.data.round}"
+        $.get url, (data) =>
+          scr = $ ".reference-screenshot"
+          scr.attr 'style', "background-image:url(#{data.layout_url})"
+          instructions = $ "#instructions"
+          instructions.src = data.instructions_url
+          @gettingRound = false
+          @gotRound = true
+      else 
+        console.log('GOT ROUND')
+
+
+    
 
   setupCanvas: ->
     canvas = $(".canvas-overlay")[0]
@@ -253,8 +288,22 @@ class App
     "
 
     if confirm?.toLowerCase() is "yes"
-      @$result[0].contentWindow.postMessage(@editor.getValue(), "*")
-      @$result.show()
+      # @$result[0].contentWindow.postMessage(@editor.getValue(), "*")
+      # @$result.show()
+      console.log('DONE')
+      $.ajax 
+        url: "http://#{HOST}:3000/get-layout"
+        method: 'POST'
+        datatype: 'json'
+        contentType: "application/json",
+        data:  
+          JSON.stringify 
+            html: @editor.getValue()
+            player: localStorage["name"]
+        success: (data) -> 
+          console.log('DONE', data)
+          window.location.href = data.redirect
+        error: (err) -> console.error(err)
 
   onChange: (e) =>
     @debouncedSaveContent()
