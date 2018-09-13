@@ -101,7 +101,7 @@ gulp
 
   .task "copy-page-files", ->
     gulp
-      .src path.join(config.paths.assets, "{instructions.html,page.png,result.html,beach.jpg}")
+      .src path.join(config.paths.assets, "{instructions.html,preview.html,page.png,result.html,beach.jpg}")
       .pipe gulp.dest(path.join config.paths.dist, "assets")
 
   .task "webpack-dev-server", (done) ->

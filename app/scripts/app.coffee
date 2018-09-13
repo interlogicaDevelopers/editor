@@ -4,8 +4,8 @@ _ = require "underscore"
 $ = require "jquery"
 io = require "socket.io-client"
 
-HOST = "localhost"
-#HOST = "admin.codeinthedark.interlogica.it"
+#HOST = "localhost"
+HOST = "admin.codeinthedark.interlogica.it"
 
 ace = require "brace"
 require "brace/mode/html"
@@ -51,8 +51,10 @@ class App
 
   EXCLAMATION_EVERY: 10
   EXCLAMATIONS: ["Super!", "Radical!", "Fantastic!", "Great!", "OMG",
-  "Whoah!", ":O", "Nice!", "Splendid!", "Wild!", "Grand!", "Impressive!",
-  "Stupendous!", "Extreme!", "Awesome!"]
+  "Whoah!", ":O", "Nice!", "Splendid!", "Wild!", "Grande!", "Impressive!",
+  "Stupendous!", "Extreme!", "Awesome!", "Fiiico", "Booooomba", "Coool", "Togo!",
+    "GNEEE! (cit)", "OVER 9000!!!",
+  ]
 
   currentStreak: 0
   powerMode: false
@@ -300,9 +302,17 @@ class App
           JSON.stringify 
             html: @editor.getValue()
             player: localStorage["name"]
+            height: screen.height,
+            width: screen.width
         success: (data) -> 
           console.log('DONE', data)
-          window.location.href = data.redirect
+
+          hash = '#player=' + encodeURIComponent(data.player) +  '&url=' + encodeURIComponent(data.redirect)
+
+#          window.location.href = data.redirect
+          window.location.href = '/assets/preview.html' + hash
+
+
         error: (err) -> console.error(err)
 
   onChange: (e) =>
