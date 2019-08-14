@@ -4,8 +4,8 @@ _ = require "underscore"
 $ = require "jquery"
 io = require "socket.io-client"
 
-#HOST = "localhost"
-HOST = "admin.codeinthedark.interlogica.it"
+HOST = "localhost"
+#HOST = "admin.codeinthedark.interlogica.it"
 
 ace = require "brace"
 require "brace/mode/html"
