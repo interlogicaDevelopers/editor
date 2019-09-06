@@ -110,6 +110,7 @@ gulp
       hot: true
       watchDelay: 100
       noInfo: true
+      disableHostCheck: true
 
     server.listen config.serverPort, "0.0.0.0", (err) ->
       throw new $.util.PluginError("webpack-dev-server", err) if err
