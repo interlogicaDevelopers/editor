@@ -4,15 +4,14 @@ _ = require "underscore"
 $ = require "jquery"
 io = require "socket.io-client"
 
-HOST = "localhost"
+#HOST = "localhost"
 #HOST = "admin.codeinthedark.interlogica.it"
+HOST = process.env.REMOTE_ADMIN_HOST;
 
 ace = require "brace"
 require "brace/mode/html"
 require "brace/theme/vibrant_ink"
 require "brace/ext/searchbox"
-
-console.log(ace)
 
 class WSConnector          
   constructor: (host, onSocketMessage)->   

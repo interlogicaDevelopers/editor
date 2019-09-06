@@ -30,6 +30,7 @@
     "webpack-dev-server": "^1.7.0"
   },
   "scripts": {
+    "prestart": "./loadEnv.sh",
     "start": "gulp serve",
     "build": "gulp dist"
   },
