@@ -117,7 +117,7 @@ class App
       if not @gotRound and not @gettingRound
         @gettingRound = true;
         console.log('call get round')
-        url = "http://#{HOST}/round/#{message.data.round}"
+        url = "#{HOST}/round/#{message.data.round}"
         $.get url, (data) =>
           scr = $ ".reference-screenshot"
           scr.attr 'style', "background-image:url(#{data.layout_url})"
@@ -291,7 +291,7 @@ class App
       # @$result.show()
       console.log('DONE')
       $.ajax 
-        url: "http://#{HOST}/get-layout"
+        url: "#{HOST}/get-layout"
         method: 'POST'
         datatype: 'json'
         contentType: "application/json",
