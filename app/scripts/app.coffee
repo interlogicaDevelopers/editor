@@ -122,7 +122,7 @@ class App
           scr = $ ".reference-screenshot"
           scr.attr 'style', "background-image:url(#{data.layout_url})"
           instructions = $ "#instructions"
-          instructions.src = data.instructions_url
+          instructions.attr 'src', data.instructions_url
           @gettingRound = false
           @gotRound = true
       else 
