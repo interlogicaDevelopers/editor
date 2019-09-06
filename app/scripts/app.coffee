@@ -4,9 +4,7 @@ _ = require "underscore"
 $ = require "jquery"
 io = require "socket.io-client"
 
-#HOST = "localhost"
-#HOST = "admin.codeinthedark.interlogica.it"
-HOST = process.env.REMOTE_ADMIN_HOST;
+HOST = "https://admin.codeinthedark.interlogica.it";
 
 ace = require "brace"
 require "brace/mode/html"
@@ -15,7 +13,7 @@ require "brace/ext/searchbox"
 
 class WSConnector          
   constructor: (host, onSocketMessage)->   
-    socket = io "#{host}:3000"
+    socket = io "#{host}"
     socket.on 'message', onSocketMessage
     
 
@@ -119,7 +117,7 @@ class App
       if not @gotRound and not @gettingRound
         @gettingRound = true;
         console.log('call get round')
-        url = "http://#{HOST}:3000/round/#{message.data.round}"
+        url = "http://#{HOST}/round/#{message.data.round}"
         $.get url, (data) =>
           scr = $ ".reference-screenshot"
           scr.attr 'style', "background-image:url(#{data.layout_url})"
@@ -293,7 +291,7 @@ class App
       # @$result.show()
       console.log('DONE')
       $.ajax 
-        url: "http://#{HOST}:3000/get-layout"
+        url: "http://#{HOST}/get-layout"
         method: 'POST'
         datatype: 'json'
         contentType: "application/json",
